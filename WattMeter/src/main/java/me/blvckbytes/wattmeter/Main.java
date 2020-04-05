@@ -1,5 +1,9 @@
 package me.blvckbytes.wattmeter;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -24,10 +28,16 @@ public class Main {
     }
   }
 
+  public static void main( String[] args ) {
+    CommunicationLink link = new SocketInterface( "192.168.0.190", 80 );
+    link.connect();
+    link.setLineCallback( data -> System.out.println( "Received: " + data ) );
+  }
+
   /**
    * Main entry point of this program
    */
-  public static void main( String[] args ) {
+  public static void main2( String[] args ) {
     // Read out interval from config
     Properties props = PropConfig.getInstance().getProps();
     int interval = Integer.parseInt( props.getProperty( "meter_interval" ) );
@@ -35,7 +45,8 @@ public class Main {
 
     // Create database and watt meter
     Database db = new Database( PropConfig.getInstance().getProps() );
-    WattMeter meter = new WattMeter( interval, intervalUnit );
+    CommunicationLink link = new SerialInterface( "FT232" );
+    WattMeter meter = new WattMeter( interval, intervalUnit, link );
 
     // Write new datapoints directly to database
     meter.setDataCallback( db::write );

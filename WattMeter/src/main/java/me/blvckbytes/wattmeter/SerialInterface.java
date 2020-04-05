@@ -1,16 +1,12 @@
 package me.blvckbytes.wattmeter;
 
 import com.fazecast.jSerialComm.SerialPort;
-import lombok.Setter;
 
 import java.io.PrintWriter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Communicator {
-
-  @Setter
-  private ParamCallback< String > lineCallback;
+public class SerialInterface extends CommunicationLink {
 
   private SerialPort target;
   private ExecutorService listener;
@@ -21,16 +17,38 @@ public class Communicator {
    * Initialize a new communicator for the arduino serial interface
    * which can receive lines individually and send over usb
    */
-  public Communicator( String targetName ) {
+  public SerialInterface( String targetName ) {
     this.targetName = targetName;
+
+    // Listener thread for receiving data
     this.listener = Executors.newSingleThreadExecutor();
-    initialize();
+  }
+
+  /**
+   * Send text to the arduino interface
+   * @param line Line to send
+   */
+  @Override
+  public void sendLine( String line ) {
+    try {
+      // Write out line, followed by a carriage return and a new line
+      PrintWriter writer = new PrintWriter( this.target.getOutputStream() );
+      writer.write( line );
+      writer.write( "\r\n" );
+
+      // Close writer
+      writer.close();
+    } catch ( Exception e ) {
+      SimpleLogger.getInst().log( "Error while trying to send over serial!", SLLevel.ERROR );
+      SimpleLogger.getInst().log( e, SLLevel.ERROR );
+    }
   }
 
   /**
    * Shut this communicator down, this means listener thread
    * shutdown and serial port close
    */
+  @Override
   public void shutdown() {
     // Stop listening thread
     this.active = false;
@@ -48,7 +66,8 @@ public class Communicator {
   /**
    * Initialize port and start listening in main loop
    */
-  private void initialize() {
+  @Override
+  public void connect() {
     try {
       // Search for correct port
       if( !searchPort() )
@@ -67,25 +86,6 @@ public class Communicator {
   }
 
   /**
-   * Send text to the arduino interface
-   * @param line Line to send
-   */
-  public void sendLine( String line ) {
-    try {
-      // Write out line, followed by a carriage return and a new line
-      PrintWriter writer = new PrintWriter( this.target.getOutputStream() );
-      writer.write( line );
-      writer.write( "\r\n" );
-
-      // Close writer
-      writer.close();
-    } catch ( Exception e ) {
-      SimpleLogger.getInst().log( "Error while trying to send over serial!", SLLevel.ERROR );
-      SimpleLogger.getInst().log( e, SLLevel.ERROR );
-    }
-  }
-
-  /**
    * Start listening for messages and call specified
    * callback if it has been set
    */
@@ -94,7 +94,6 @@ public class Communicator {
       try {
         // Loop while this listener is active, this is done in order
         // to stop the thread on shutdown
-        StringBuilder remainder = new StringBuilder();
         while ( this.active ) {
 
           // Nothing to read...
@@ -108,34 +107,9 @@ public class Communicator {
           // Read into buffer and convert to trimmed string
           byte[] readBuffer = new byte[ this.target.bytesAvailable() ];
           this.target.readBytes( readBuffer, readBuffer.length );
-          String result = new String( readBuffer ).replaceAll( "(^ +)|( +$)", "" );
 
-          // Only call callback if string is not empty
-          if( result.equals( "" ) )
-            continue;
-
-          if( !( result.endsWith( "\n" ) || result.endsWith( "\r" ) ) ) {
-            remainder.append( result );
-            continue;
-          }
-
-          // Loop all lines, since sometimes multiple lines stick together
-          // This basically happens when incoming speed is > than reading speed
-          // I still want to have lines separated
-          String[] out = ( remainder.toString() + result ).split( "[\n\r]" );
-          for( String line : out ) {
-
-            // Trim current line and check if it still contains anything
-            line = line.trim();
-            if( line.equals( "" ) )
-              continue;
-
-            // Call with current line
-            this.lineCallback.call( line );
-          }
-
-          // Reset remainder buffer
-          remainder = new StringBuilder();
+          // Handle calling the callback ( superclass stuff )
+          handleCallback( new String( readBuffer ).replaceAll( "(^ +)|( +$)", "" ) );
         }
       } catch ( Exception e ) {
         SimpleLogger.getInst().log( "Error while receiving from serial port!", SLLevel.ERROR );

@@ -10,7 +10,7 @@ public class WattMeter {
   @Setter
   private ParamCallback< DataPoint > dataCallback;
 
-  private Communicator comm;
+  private CommunicationLink comm;
   private TreeMap< Long, Integer > buffer;
   private long duration;
 
@@ -18,7 +18,7 @@ public class WattMeter {
    * Set up a new wattmeter to keep track of power
    * usage and plot graphs over time
    */
-  public WattMeter( long dataLength, TimeUnit lengthUnit ) {
+  public WattMeter( long dataLength, TimeUnit lengthUnit, CommunicationLink comm ) {
     // Buffer is sorted by key ( time )
     this.buffer = new TreeMap<>();
 
@@ -26,7 +26,7 @@ public class WattMeter {
     this.duration = TimeUnit.MILLISECONDS.convert( dataLength, lengthUnit );
 
     // Start communication
-    this.comm = new Communicator( "FT232" );
+    this.comm = comm;
     this.comm.setLineCallback( this::receive );
   }
 
