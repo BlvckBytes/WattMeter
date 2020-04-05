@@ -3,6 +3,8 @@
 ## Warning
 This project is on hold because I destroyed the wattmeter by not adhering to what I thought about in the first place (basically predicted this)... The power supply is NOT isolated from mains, plugging the USB of the FTDI into something that shorts USB GND to earth's terminal will turn this into a smoke-grenade. I ordered a new one and will then connect this over wifi, a socket extension is already being worked on.
 
+![Damaged arduino](readme_images/damaged.jpg)
+
 ## Introduction
 Since I have got myself a home-server now, I'd like to monitor the power costs. I found an old watt-meter for plugging between appliances and the wall socket, which displays the number of watts drawn. I planted an arduino in there, that interfaces with the ADE7755 inside the store-bought circuit. A FTDI breakout board then converts those arduino serial signals into USB, which gets plugged into my server. Both the arduino firmware and the java service have been uploaded on this repo.
 
