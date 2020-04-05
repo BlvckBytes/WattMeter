@@ -1,6 +1,10 @@
-package me.blvckbytes.wattmeter;
+package me.blvckbytes.wattmeter.meter;
 
 import lombok.Setter;
+import me.blvckbytes.wattmeter.utils.ParamCallback;
+import me.blvckbytes.wattmeter.utils.SLLevel;
+import me.blvckbytes.wattmeter.utils.SimpleLogger;
+import me.blvckbytes.wattmeter.communication.CommunicationLink;
 
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;

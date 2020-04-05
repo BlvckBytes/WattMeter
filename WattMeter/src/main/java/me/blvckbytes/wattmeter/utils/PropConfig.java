@@ -1,6 +1,7 @@
-package me.blvckbytes.wattmeter;
+package me.blvckbytes.wattmeter.utils;
 
 import lombok.Getter;
+import me.blvckbytes.wattmeter.WattMeterApplication;
 
 import java.io.*;
 import java.util.Properties;
@@ -52,7 +53,7 @@ public class PropConfig {
    */
   private boolean load() {
     try {
-      File f = new File( Main.path + outputFile );
+      File f = new File( WattMeterApplication.path + outputFile );
       loadFromStream( new FileInputStream( f ) );
       return true;
     } catch ( Exception e ) {
@@ -70,7 +71,7 @@ public class PropConfig {
 
     try {
       // Create output stream to file
-      File f = new File( Main.path + outputFile );
+      File f = new File( WattMeterApplication.path + outputFile );
       if( !f.exists() && !f.getParentFile().mkdirs() && !f.createNewFile() )
         throw new Exception( "Could not create output file!" );
 

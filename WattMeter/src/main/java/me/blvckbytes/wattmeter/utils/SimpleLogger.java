@@ -1,4 +1,4 @@
-package me.blvckbytes.wattmeter;
+package me.blvckbytes.wattmeter.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -14,13 +14,11 @@ public class SimpleLogger {
   }
 
   /**
-   * Logs the given message to console, automatically appends the
-   * prefix aswell as translates colors for the unix terminal
+   * Logs the given message to console, automatically appends the prefix
    * @param input What to log
    * @param level What level to log this entry at
    */
   public void log( String input, SLLevel level ) {
-    input = input.replaceAll( "§([0-9]|[a-f]|[lnokmr])", "" );
     System.out.println( genPrefix( level ) + input );
   }
 
@@ -31,7 +29,6 @@ public class SimpleLogger {
    * @param level What level to log this entry at
    */
   public void logInlineBegin( String input, SLLevel level ) {
-    input = input.replaceAll( "§([0-9]|[a-f]|[lnokmr])", "" );
     System.out.print( genPrefix( level ) + input );
   }
 
@@ -41,11 +38,15 @@ public class SimpleLogger {
    * @param input What to log
    */
   public void logInline( String input ) {
-    input = input.replaceAll( "§([0-9]|[a-f]|[lnokmr])", "" );
     System.out.print( input );
   }
 
-
+  /**
+   * Directly log an exception without having to stringify it
+   * outside of this class, it's a standard procedure
+   * @param e Exception to log
+   * @param level Level to log at
+   */
   public void log( Exception e, SLLevel level ) {
     StringWriter errors = new StringWriter();
     e.printStackTrace( new PrintWriter( errors ) );

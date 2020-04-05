@@ -10,6 +10,12 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.2.RELEASE</version>
+    </parent>
+
     <properties>
         <!-- Using Java 13 -->
         <java.version>1.13</java.version>
@@ -31,6 +37,34 @@
             <version>2.6.0</version>
         </dependency>
 
+        <!-- Handlebars renderer -->
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+        <!-- Jackson for Handlebars -->
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars-jackson2</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+        <!-- Guava cache for Handlebars -->
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars-guava-cache</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+        <!-- JSON itself -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
+
         <!-- Lombok annotation lib to reduce code -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -44,6 +78,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.19</version>
+        </dependency>
+
+        <!-- Spring Boot framework -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
     </dependencies>
@@ -72,7 +112,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>me.blvckbytes.wattmeter.Main</mainClass>
+                            <mainClass>me.blvckbytes.wattmeter.WattMeterApplication</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -87,6 +127,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

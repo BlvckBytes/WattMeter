@@ -3,6 +3,8 @@ settings
 .project
 out/
 target/
+*.css
+*.css.map
 *.iml
 .idea/
 .DS_Store

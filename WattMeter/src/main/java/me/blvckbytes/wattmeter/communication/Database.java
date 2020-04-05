@@ -1,4 +1,8 @@
-package me.blvckbytes.wattmeter;
+package me.blvckbytes.wattmeter.communication;
+
+import me.blvckbytes.wattmeter.meter.DataPoint;
+import me.blvckbytes.wattmeter.utils.SLLevel;
+import me.blvckbytes.wattmeter.utils.SimpleLogger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

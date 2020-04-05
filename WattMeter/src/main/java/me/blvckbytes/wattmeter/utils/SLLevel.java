@@ -1,4 +1,4 @@
-package me.blvckbytes.wattmeter;
+package me.blvckbytes.wattmeter.utils;
 
 public enum SLLevel {
 

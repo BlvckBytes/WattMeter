@@ -1,6 +1,8 @@
-package me.blvckbytes.wattmeter;
+package me.blvckbytes.wattmeter.communication;
 
 import com.fazecast.jSerialComm.SerialPort;
+import me.blvckbytes.wattmeter.utils.SLLevel;
+import me.blvckbytes.wattmeter.utils.SimpleLogger;
 
 import java.io.PrintWriter;
 import java.util.concurrent.ExecutorService;

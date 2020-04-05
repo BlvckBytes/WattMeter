@@ -1,6 +1,7 @@
-package me.blvckbytes.wattmeter;
+package me.blvckbytes.wattmeter.communication;
 
 import lombok.Setter;
+import me.blvckbytes.wattmeter.utils.ParamCallback;
 
 /**
  * This interface represents a possible implementation of
@@ -16,17 +17,17 @@ public abstract class CommunicationLink {
    * Send a line over communication link
    * @param line Line to send
    */
-  abstract void sendLine( String line );
+  public abstract void sendLine( String line );
 
   /**
    * Open a connection over the link
    */
-  abstract void connect();
+  public abstract void connect();
 
   /**
    * Shutdown link-manager with all his internal stuff
    */
-  abstract void shutdown();
+  public abstract void shutdown();
 
   /**
    * Handles the management of calling the callback with proper
